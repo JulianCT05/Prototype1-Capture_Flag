@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 10f;
     private SpriteRenderer sr;
     private bool isFlashing = false;
+    private Coroutine flashCoroutine;
 
     void Start()
     {
@@ -34,7 +35,17 @@ public class PlayerMovement : MonoBehaviour
 
             if (!isFlashing)
             {
-                StartCoroutine(FlashContinuously());
+                flashCoroutine = StartCoroutine(FlashContinuously());
+            }
+        }
+
+        if (collision.gameObject.tag == "Yarea")
+        {
+            if (isFlashing)
+            {
+                StopCoroutine(flashCoroutine);
+                isFlashing = false;
+                sr.color = Color.white;
             }
         }
     }
@@ -46,9 +57,9 @@ public class PlayerMovement : MonoBehaviour
         while (true)
         {
             sr.color = Color.red;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
             sr.color = Color.white;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 }
