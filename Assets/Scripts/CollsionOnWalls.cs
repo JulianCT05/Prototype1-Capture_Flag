@@ -13,4 +13,17 @@ public class NewMonoBehaviourScript : MonoBehaviour
     {
         
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            CameraShake.instance.StartCoroutine(CameraShake.instance.Shake());
+            Destroy(collision.gameObject);
+            
+        }
+
+        Debug.Log(collision.gameObject);
+
+    }
 }

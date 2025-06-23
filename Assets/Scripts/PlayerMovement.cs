@@ -3,33 +3,52 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 10f;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private SpriteRenderer sr;
+    private bool isFlashing = false;
+
     void Start()
     {
-        
+        sr = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.RightArrow))
-        {
             transform.Translate(Vector2.right * moveSpeed * Time.deltaTime);
-        }
 
         if (Input.GetKey(KeyCode.DownArrow))
-        {
             transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
-        }
 
         if (Input.GetKey(KeyCode.LeftArrow))
-        {
             transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);
-        }
 
         if (Input.GetKey(KeyCode.UpArrow))
-        {
             transform.Translate(Vector2.up * moveSpeed * Time.deltaTime);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Flag")
+        {
+            Destroy(collision.gameObject);
+
+            if (!isFlashing)
+            {
+                StartCoroutine(FlashContinuously());
+            }
+        }
+    }
+
+    private System.Collections.IEnumerator FlashContinuously()
+    {
+        isFlashing = true;
+
+        while (true)
+        {
+            sr.color = Color.red;
+            yield return new WaitForSeconds(0.3f);
+            sr.color = Color.white;
+            yield return new WaitForSeconds(0.3f);
         }
     }
 }

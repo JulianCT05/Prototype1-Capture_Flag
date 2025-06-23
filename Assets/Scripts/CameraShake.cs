@@ -1,15 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour
 {
+    public static CameraShake instance; // <-- Add this line
+
     public AnimationCurve curve;
     public float ShakeTime = 1f;
 
-    private void Update()
+    private void Awake()
     {
-        StartCoroutine(Shake());
+        instance = this; // <-- Add this line
     }
 
     public IEnumerator Shake()
